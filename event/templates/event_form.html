@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>
+        {% if form.instance.pk %}
+            Edit Event
+        {% else %}
+            Create Event
+        {% endif %}
+    </title>
+    <style>
+        body {
+            color: brown;
+            font-family: 'Segoe UI';
+            text-align: center;
+        }
+
+        header {
+            background-color: aquamarine;
+            color: aliceblue;
+            font-size: 4em;
+            padding: 20px;
+        }
+
+        .content {
+            background-color: azure;
+            border: 1px solid rgba(250, 128, 114, 0.3);
+            border-radius: 50px;
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            padding: 0 50px 30px 50px;
+        }
+
+        button {
+            background-color: rgba(245, 222, 179, 0.4);
+            border: solid brown 1px;
+            border-radius: 5px;
+            width: 80px;
+            height: 25px;
+            color: brown;
+            font-family: 'Segoe UI';
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(245, 222, 179, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <header><strong>
+        {% if form.instance.event_id %}
+            Edit Event
+        {% else %}
+            Create a New Event
+        {% endif %}
+    </strong></header>
+
+    <br>
+    <div class="content">
+        <form method = "POST" id="event_form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type = "submit">Submit</button>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <button type="button" onclick = "window.location.href = `{% url 'event:home' %}`">Cancel</button>
+        </form>
+    </div>
+
+    <script>
+        var event_date = document.getElementById('id_date');
+
+        document.addEventListener('DOMContentLoaded', (event) => {
+            event_date.type = 'date';
+        });
+
+        document.getElementById('event_form').addEventListener('submit', function(e) {
+            var a = event_date.value;
+            var b = new Date(a);
+            var c = ("0" + (b.getMonth() + 1)).slice(-2) + '/' + ("0" + b.getDate()).slice(-2) + '/' + b.getFullYear();
+            event_date.type = 'text';
+            event_date.value = c;
+        });
+    </script>
+</body>
+</html>

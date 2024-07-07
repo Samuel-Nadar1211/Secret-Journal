@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            color: salmon;
+            font-family: 'Segoe UI';
+            text-align: center;
+        }
+
+        header {
+            background-color: aquamarine;
+            color: aliceblue;
+            font-size: 4em;
+            padding: 20px;
+            clear: both;
+        }
+
+        #content {
+            background-color: rgba(245, 222, 179, 0.2);
+            border-radius: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 60%;
+            padding-bottom: 20px;
+        }
+
+        input {
+            background-color: whitesmoke;
+        }
+
+        hr {
+            border-top: 1px solid salmon;
+            clear: both;
+        }
+
+        button {
+            background-color: rgba(245, 222, 179, 0.4);
+            border: solid brown 1px;
+            border-radius: 5px;
+            width: 80px;
+            height: 25px;
+            color: brown;
+            font-family: 'Segoe UI';
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(245, 222, 179, 0.6);
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        #logout, #choice {
+            float: right;
+        }
+
+        #outer {
+            width: 70%;
+            transform: translateX(20%);
+            margin-bottom: 300px;
+        }
+
+        .inner {
+            background-color: azure;
+            border: 1px solid rgba(250, 128, 114, 0.3);
+            border-radius: 20px;
+            width: 30%;
+            padding: 25px;
+        }
+
+        #filter {
+            float: left;
+        }
+
+        #choice > button {
+            width: 120px;
+            height: 60px;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick = "window.location.href = `{% url 'account:logout' %}`" id = "logout">Logout</button>
+    <header>
+        <strong>Welcome {{ user_name }}</strong>
+    </header>
+
+    <br><br>
+    <div id="outer"><div class = "inner" id="filter">
+        <label>
+            <input type = "radio" name = "option" value = "title" onclick = "showForm(this.value)"> Search by Title <br>
+        </label>
+        <form method = "post" id = "title" class = "hidden">
+            {% csrf_token %}
+            <input type = "text" name = "title" required> &nbsp;
+            <button type = "submit">Search</button><br>
+        </form>
+
+        <label>
+            <br><input type = "radio" name = "option" value = "date" onclick = "showForm(this.value)"> Search by Date<br>
+        </label>
+        <form method = "post" id = "date" class = "hidden">
+            {% csrf_token %}
+            <label>
+                Start Date &nbsp; <input type = "date" name = "start_date" id = "start_date" required onchange="validateDate()"><br>
+            </label>
+            <label>
+                End Date &nbsp; <input type = "date" name = "end_date" id = "end_date" required onchange="validateDate()"><br>
+            </label>
+            <button type = "submit">Search</button><br>
+        </form>
+
+        <br><br>
+        <form method = "post">
+            {% csrf_token %}
+            <button type = "submit">Reset</button>
+        </form>
+    </div>
+    
+    <div class = "inner" id = "choice">
+        <button onclick = "window.location.href = `{% url 'entry:create' %}`">Create<br>New Entry</button>
+        <br><br>
+        <button onclick = "window.location.href = `{% url 'event:home' %}`" id = "event">Event<br>Reminder</button>
+    </div></div>
+    
+    
+    {% if entries %}
+    {% csrf_token %}    
+    {% for entry in entries %}
+        <hr><div id = "content">
+            <h1>{{ entry.title }}</h1>
+            <i>Created at {{ entry.date_created }}</i><br>
+            {% if entry.date_updated != entry.date_created %}
+                <i>Last Updated at {{ entry.date_updated }}</i><br>
+            {% endif %}
+            
+            <br>
+            {{ entry.content|slice:":200" }}
+            {% if entry.content|length > 200 %}
+                ...
+            {% endif %}
+
+            <br><br>
+            <button onclick = "window.location.href = `{% url 'entry:read' entry.entry_id %}`">Read</button>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <button onclick = "window.location.href = `{% url 'entry:edit' entry.entry_id %}`">Edit</button>
+            &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <button onclick = "window.location.href = `{% url 'entry:remove' entry.entry_id %}`">Remove</button>
+        </div>
+        <br>
+        {% endfor %}
+    {% else %}
+        <h2 style="clear: both;">No entries found!</h2>
+    {% endif %}
+
+    <script>
+        function showForm (option)
+        {
+            if (option === 'title')
+            {
+                document.getElementById('date').classList.add('hidden');
+                document.getElementById('title').classList.remove('hidden');
+            }
+            else if (option === 'date')
+            {
+                document.getElementById('title').classList.add('hidden');
+                document.getElementById('date').classList.remove('hidden');
+            }
+        }
+
+        function validateDate()
+        {
+            var start_date = document.getElementById("start_date").value;
+            var end_date = document.getElementById("end_date").value;
+            const curr_date = new Date().toISOString().split('T')[0];
+
+            if (start_date && start_date > curr_date)
+            {
+                alert("Start date should not be greater than today");
+                document.getElementById("start_date").value = "";
+            }
+
+            if (end_date && end_date > curr_date)
+            {
+                alert("End date should not be greater than today");
+                document.getElementById("end_date").value = "";
+            }
+
+            if (start_date && end_date && start_date > end_date)
+            {
+                alert("End Date must be greater than Start Date");
+                document.getElementById("end_date").value = "";
+                document.getElementById("start_date").value = "";
+            }
+        } 
+    </script>
+</body>
+</html>

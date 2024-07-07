@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Secret Journal</title>
+    <style>
+        body {
+            color: brown;
+            font-family: 'Segoe UI';
+            text-align: center;
+        }
+
+        header {
+            background-color: aquamarine;
+            color: aliceblue;
+            font-size: 4em;
+            padding: 20px;
+        }
+
+        .content {
+            background-color: rgba(245, 222, 179, 0.2);
+            border-radius: 50px;
+            position: fixed;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 350px;
+            padding: 0 50px 30px 50px;
+        }
+
+        i, input {
+            background-color: whitesmoke;
+        }
+
+        hr {
+            border-top: 1px solid brown;
+        }
+
+        button {
+            background-color: rgba(245, 222, 179, 0.4);
+            border: solid brown 1px;
+            border-radius: 5px;
+            width: 80px;
+            height: 25px;
+            color: brown;
+            font-family: 'Segoe UI';
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(245, 222, 179, 0.6);
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body style = "font-size: 1em;">
+    <header>
+        <b>Secret Journal</b>
+    </header>
+
+    <br>
+    {% block content %}
+    <div class="content">
+        <h1>Journal Login</h1>
+        <hr><br>
+
+        <form method = "POST">
+            {% csrf_token %}
+
+            <label for = "email">Email: &nbsp; </label><br>
+            <input type = "email" name = "email" required >
+            <i class = "fa fa-envelope icon" ></i><br><br>
+
+            <label for = "password">Password: &nbsp; </label><br>
+            <input type = "password" name = "password" required>
+            <i class = "fa fa-lock icon" ></i><br><br>
+            
+            {% if message %}
+                <i>{{ message }}</i><br>
+            {% endif %}
+            <br>
+            <button type = "submit">Login</button> &nbsp; &nbsp; &nbsp; &nbsp;
+            <button onclick = "window.location.href = `{% url 'account:register' %}`">Register</button>
+        </form>
+    </div>
+    {% endblock %}
+</body>
+</html>

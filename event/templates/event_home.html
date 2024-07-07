@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Event Reminder</title>
+    <style>
+        body {
+            color: salmon;
+            font-family: 'Segoe UI';
+            text-align: center;
+        }
+
+        header {
+            background-color: aquamarine;
+            color: aliceblue;
+            font-size: 4em;
+            padding: 20px;
+            clear: both;
+        }
+
+        #content {
+            background-color: azure;
+            border: 1px solid rgba(250, 128, 114, 0.3);
+            border-radius: 30px;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+            padding: 10px 50px;
+        }
+
+        button {
+            background-color: rgba(245, 222, 179, 0.4);
+            border: solid brown 1px;
+            border-radius: 5px;
+            color: brown;
+            font-family: 'Segoe UI';
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 180px;
+            height: 90px;
+        }
+
+        button:hover {
+            background-color: rgba(245, 222, 179, 0.6);
+        }
+
+        #logout {
+            float: right;
+            width: 80px;
+            height: 25px;
+        }
+
+        #outer {
+            width: 70%;
+            transform: translateX(20%);
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick = "window.location.href = `{% url 'account:logout' %}`" id = "logout">Logout</button>
+    <header>
+        <strong>Event Reminder</strong>
+    </header>
+    <br><br>
+
+    <div id = "outer">
+        <button onclick = "window.location.href = `{% url 'event:create' %}`">Add<br>Event</button>
+        <button onclick = "window.location.href = `{% url 'event:manage' %}`">Manage<br>Event</button>
+        <button onclick = "window.location.href = `{% url 'event:generate_wish' %}`">Generate<br>Wishes</button>
+        <button onclick = "window.location.href = `{% url 'entry:home' %}`">Journal<br>Entry</button>
+    </div> 
+    <br><br>
+
+    <div id = "content">
+    {% if messages %}
+        <ul>
+        {% for message in messages %}
+            <li>{{ message }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        No events added
+    {% endif %}
+</body>
+</html>

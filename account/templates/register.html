@@ -1,0 +1,13 @@
+{% extends 'index.html' %}
+{% block content %}
+<div class="content">
+    <h1>Create a new user</h1><hr>
+
+    <form method = "post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type = "submit">Register</button> &nbsp; &nbsp; &nbsp; &nbsp;
+        <button onclick = "window.location.href = `{% url 'account:index' %}`">Login</button>
+    </form>
+</div>
+{% endblock %}

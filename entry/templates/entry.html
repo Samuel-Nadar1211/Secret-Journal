@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ entry.title }}</title>
+    <style>
+        body {
+            color: salmon;
+            font-family: 'Segoe UI';
+            text-align: center;
+        }
+
+        header {
+            background-color: aquamarine;
+            color: aliceblue;
+            font-size: 4em;
+            padding: 20px;
+            clear: both;
+        }
+
+        button {
+            background-color: rgba(245, 222, 179, 0.4);
+            border: solid brown 1px;
+            border-radius: 5px;
+            width: 80px;
+            height: 25px;
+            color: brown;
+            font-family: 'Segoe UI';
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgba(245, 222, 179, 0.6);
+        }
+
+        #home {
+            float: left;
+        }
+
+        #logout {
+            float: right;
+        }
+
+        #content {
+            background-color: azure;
+            border: 1px solid rgba(250, 128, 114, 0.3);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: justify;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick = "window.location.href = `{% url 'entry:home' %}`" id = "home">Home</button>
+    <button onclick = "window.location.href = `{% url 'account:logout' %}`" id = "logout">Logout</button>
+    <header>
+        <strong>{{ entry.title }}</strong>
+    </header>
+
+    <br>
+    <button onclick = "window.location.href = `{% url 'entry:edit' entry_id=entry.entry_id %}`">Edit</button>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <button onclick = "window.location.href = `{% url 'entry:remove' entry_id=entry.entry_id %}`">Remove</button>
+    <br>
+    <i>Created at {{ entry.date_created }}<br>
+    {% if entry.date_updated != entry.date_created %}
+        [Last Updated at {{ entry.date_updated }}]<br>
+    {% endif %}
+    </i><br>
+    <div id = "content">
+        {{ entry.content|linebreaksbr }}
+    </div>
+</body>
+</html>

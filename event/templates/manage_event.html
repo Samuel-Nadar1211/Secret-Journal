@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Events</title>
+    <style>
+        body {
+            color: salmon;
+            font-family: 'Segoe UI';
+            text-align: center;
+        }
+
+        header {
+            background-color: aquamarine;
+            color: aliceblue;
+            font-size: 4em;
+            padding: 20px;
+            clear: both;
+        }
+
+        table {
+            margin-top: 50px;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: whitesmoke;
+            border: 1px solid rgba(250, 128, 114, 0.3);
+            border-radius: 2px;
+        }
+
+        td {
+            background-color: azure;
+            border: 1px solid rgba(250, 128, 114, 0.3);
+            border-radius: 2px;
+            padding: 5px 12px;
+        }
+
+        thead > tr > td {
+            background-color: papayawhip;
+        }
+
+        button {
+            background-color: rgba(245, 222, 179, 0.4);
+            border: solid brown 1px;
+            border-radius: 5px;
+            color: brown;
+            font-family: 'Segoe UI';
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            width: 80px;
+            height: 25px;
+        }
+
+        button:hover {
+            background-color: rgba(245, 222, 179, 0.6);
+        }
+
+        .choice {
+            width: 150px;
+        }
+
+        #logout {
+            float: right;
+        }
+    </style>
+</head>
+
+<body>
+    <button onclick="window.location.href = `{% url 'account:logout' %}`" id="logout">Logout</button>
+    <header>
+        <strong>Events</strong>
+    </header>
+
+    <button onclick="window.location.href = `{% url 'event:home' %}`" class="choice">Event Reminder</button>
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    &nbsp; &nbsp; &nbsp; &nbsp;
+    <button onclick="window.location.href = `{% url 'entry:home' %}`" class="choice">Journal Entry</button>
+    
+    {% if events %}
+    <table>
+    <thead>
+        <tr>
+            <td>Title</td>
+            <td>Date</td>
+            <td>Is Anniversary?</td>
+            <td>Remark</td>
+            <td>Edit</td>
+            <td>Remove</td>
+        </tr>
+    </thead>
+    <tbody>
+        {% for event in events %}
+        <tr>
+            <td>{{ event.title }}</td>
+            <td>{{ event.date }}</td>
+            <td>{{ event.is_anniversary }}</td>
+            <td>{{ event.remark }}</td>
+            <td><button onclick="window.location.href = `{% url 'event:edit' event_id=event.event_id %}`">Edit</button></td>
+            <td><button onclick="window.location.href = `{% url 'event:remove' event_id=event.event_id %}`">Remove</button></td>
+        </tr>    
+        {% endfor %}
+    </tbody>
+    </table>
+    {% else %}
+        <strong>No events added!</strong>
+    {% endif %}
+
+</body>
+</html>
